@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HackHub | Collaborative Coding Platform</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --dark-gray: #334155;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-dark: rgba(0, 0, 0, 0.2);
+            --neon-blue: #00d9ff;
+            --neon-purple: #b967ff;
+        }
+        
+        [data-theme="light"] {
+            --dark: #f8fafc;
+            --light: #0f172a;
+            --gray: #64748b;
+            --dark-gray: #cbd5e1;
+            --glass: rgba(0, 0, 0, 0.05);
+            --glass-dark: rgba(255, 255, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .neon-border {
+            border: 2px solid transparent;
+            background: linear-gradient(var(--dark), var(--dark)) padding-box,
+                        linear-gradient(90deg, var(--neon-blue), var(--neon-purple)) border-box;
+            border-radius: 12px;
+        }
+        
+        .neon-shadow {
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+        }
+        
+        .neon-shadow-purple {
+            box-shadow: 0 0 15px rgba(185, 103, 255, 0.3);
+        }
+        
+        .section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid var(--neon-blue);
+            width: 0;
+            animation: typing 3.5s steps(40, end) forwards, blink 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--neon-blue); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .btn-primary-custom {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-primary-custom:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary-custom:hover:after {
+            left: 100%;
+        }
+        
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .message-bubble.user {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message-bubble.other {
+            background-color: var(--dark-gray);
+            color: var(--light);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .editor-line-numbers {
+            color: var(--gray);
+            text-align: right;
+            padding-right: 10px;
+            user-select: none;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .video-placeholder {
+            background: linear-gradient(45deg, #1e293b, #334155);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-weight: 600;
+        }
+        
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .password-strength.weak {
+            width: 25%;
+            background-color: #ef4444;
+        }
+        
+        .password-strength.medium {
+            width: 50%;
+            background-color: #f59e0b;
+        }
+        
+        .password-strength.strong {
+            width: 100%;
+            background-color: #10b981;
+        }
+        
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: var(--primary);
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: var(--primary);
+        }
+        
+        .theme-toggle {
+            width: 60px;
+            height: 30px;
+        }
+        
+        .theme-toggle:after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        #themeToggle:checked + .theme-toggle:after {
+            transform: translateX(30px);
+        }
+        
+        .loading-bar {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            transform: translateX(-100%);
+            animation: loading 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .cursor-blink {
+            animation: cursorBlink 1s infinite;
+        }
+        
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .mobile-hide {
+                display: none;
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--dark-gray);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading animation -->
+    <div class="loading-bar" id="loadingBar"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top glass-card py-3" style="z-index: 1000;">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3 gradient-text" href="#" onclick="showSection('home')">HackHub</a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('features')">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('dashboard')">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> Account
+                        </a>
+                        <ul class="dropdown-menu glass-card border-0 p-2">
+                            <li><a class="dropdown-item" href="#" onclick="showSection('profile')"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="showSection('login')"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showSection('register')"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input" type="checkbox" id="themeToggle" onclick="toggleTheme()">
+                            <label class="form-check-label" for="themeToggle">
+                                <i class="fas fa-moon"></i>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content - All Sections -->
+    <main class="container-fluid px-0" style="padding-top: 80px;">
+        
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="container py-5">
+                <!-- Hero Section -->
+                <div class="row align-items-center min-vh-80 py-5">
+                    <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right">
+                        <h1 class="display-3 fw-bold mb-4">
+                            <span class="gradient-text">Collaborative Coding</span> Made Simple
+                        </h1>
+                        <p class="lead mb-4">
+                            <span class="typing-text">HackHub is a real-time collaborative platform for developers to code together, share ideas, and build amazing projects.</span>
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 mt-5">
+                            <button class="btn btn-primary-custom pulse" onclick="showSection('codeEditor')">
+                                <i class="fas fa-play me-2"></i> Start Coding
+                            </button>
+                            <button class="btn glass-card border border-light" onclick="showSection('createRoom')">
+                                <i class="fas fa-plus me-2"></i> Create Room
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" data-aos="fade-left">
+                        <div class="glass-card p-4 float-animation">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary rounded-circle p-2 me-2">
+                                    <i class="fas fa-code text-white"></i>
+                                </div>
+                                <h5 class="mb-0">Live Code Editor</h5>
+                            </div>
+                            <div class="code-editor-preview p-3 rounded" style="background-color: #1e1e1e;">
+                                <div class="d-flex text-white-50 mb-2">
+                                    <div class="me-3">index.js</div>
+                                    <div class="me-3">style.css</div>
+                                    <div>index.html</div>
+                                </div>
+                                <div class="editor-line-numbers d-inline-block me-3 text-end">
+                                    1<br>2<br>3<br>4<br>5<br>6<br>7<br>8
+                                </div>
+                                <div class="d-inline-block code-font">
+                                    <div><span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">helloWorld</span>() {</div>
+                                    <div>&nbsp;&nbsp;<span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #ce9178;">"Hello, HackHub!"</span>);</div>
+                                    <div>}</div>
+                                    <div><br></div>
+                                    <div><span style="color: #c586c0;">const</span> <span style="color: #4fc1ff;">result</span> = <span style="color: #dcdcaa;">helloWorld</span>();</div>
+                                    <div><span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #ce9178;">"Execution complete!"</span>);</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Features -->
+                <div class="row py-5" data-aos="fade-up">
+                    <div class="col-12 text-center mb-5">
+                        <h2 class="display-5 fw-bold mb-3">Why Choose HackHub?</h2>
+                        <p class="text-muted">Everything you need for collaborative development in one place</p>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 hover-effect">
+                            <div class="bg-primary bg-gradient rounded-circle p-3 d-inline-block mb-3">
+                                <i class="fas fa-users fa-2x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Real-time Collaboration</h4>
+                            <p>Code together with multiple developers in real-time. See each other's cursor, selections, and changes instantly.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 hover-effect">
+                            <div class="bg-success bg-gradient rounded-circle p-3 d-inline-block mb-3">
+                                <i class="fas fa-video fa-2x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Video & Chat</h4>
+                            <p>Integrated video calls and chat to discuss ideas without leaving the editor. Perfect for remote pair programming.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 hover-effect">
+                            <div class="bg-warning bg-gradient rounded-circle p-3 d-inline-block mb-3">
+                                <i class="fas fa-code-branch fa-2x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Multi-language Support</h4>
+                            <p>Supports 50+ programming languages with syntax highlighting, autocompletion, and error detection.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- How It Works -->
+                <div class="row py-5" data-aos="fade-up">
+                    <div class="col-12 text-center mb-5">
+                        <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+                        <p class="text-muted">Get started with HackHub in just three simple steps</p>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <span class="display-6 fw-bold">1</span>
+                            </div>
+                            <h4 class="fw-bold mb-3">Create Account</h4>
+                            <p>Sign up for free in less than a minute. No credit card required.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-success d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <span class="display-6 fw-bold">2</span>
+                            </div>
+                            <h4 class="fw-bold mb-3">Create or Join Room</h4>
+                            <p>Start a new coding session or join an existing one with a room ID.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center">
+                            <div class="rounded-circle bg-warning d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <span class="display-6 fw-bold">3</span>
+                            </div>
+                            <h4 class="fw-bold mb-3">Start Coding</h4>
+                            <p>Invite teammates, start video chat, and begin coding together in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scroll indicator -->
+                <div class="text-center py-5">
+                    <div class="scroll-indicator">
+                        <i class="fas fa-chevron-down fa-2x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Login Section -->
+        <section id="login" class="section">
+            <div class="container py-5">
+                <div class="row justify-content-center align-items-center min-vh-80">
+                    <div class="col-md-6 col-lg-5" data-aos="zoom-in">
+                        <div class="glass-card p-4 p-md-5">
+                            <div class="text-center mb-5">
+                                <h2 class="fw-bold gradient-text">Welcome Back</h2>
+                                <p class="text-muted">Sign in to your HackHub account</p>
+                            </div>
+                            
+                            <form id="loginForm">
+                                <div class="mb-4">
+                                    <label for="loginEmail" class="form-label">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4 form-check">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                                    <a href="#" class="float-end text-primary">Forgot password?</a>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary-custom w-100 mb-3">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Sign In
+                                </button>
+                                
+                                <div class="text-center mt-4">
+                                    <p class="text-muted">Don't have an account? 
+                                        <a href="#" class="text-primary fw-bold" onclick="showSection('register')">Sign up here</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Register Section -->
+        <section id="register" class="section">
+            <div class="container py-5">
+                <div class="row justify-content-center align-items-center min-vh-80">
+                    <div class="col-md-8 col-lg-7" data-aos="zoom-in">
+                        <div class="glass-card p-4 p-md-5">
+                            <div class="text-center mb-5">
+                                <h2 class="fw-bold gradient-text">Create Account</h2>
+                                <p class="text-muted">Join thousands of developers on HackHub</p>
+                            </div>
+                            
+                            <form id="registerForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" class="form-control" id="firstName" placeholder="John" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-4">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="registerEmail" class="form-label">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control" id="registerEmail" placeholder="name@example.com" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="registerPassword" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="registerPassword" placeholder="Create a strong password" required>
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleRegisterPassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="mt-2">
+                                        <small class="text-muted">Password strength: <span id="passwordStrengthText">Weak</span></small>
+                                        <div class="password-strength weak" id="passwordStrength"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                    </div>
+                                    <div id="passwordMatch" class="form-text"></div>
+                                </div>
+                                
+                                <div class="mb-4 form-check">
+                                    <input type="checkbox" class="form-check-input" id="termsAgreement" required>
+                                    <label class="form-check-label" for="termsAgreement">
+                                        I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary-custom w-100 mb-3">
+                                    <i class="fas fa-user-plus me-2"></i> Create Account
+                                </button>
+                                
+                                <div class="text-center mt-4">
+                                    <p class="text-muted">Already have an account? 
+                                        <a href="#" class="text-primary fw-bold" onclick="showSection('login')">Sign in here</a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section">
+            <div class="container py-5">
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <h1 class="display-5 fw-bold gradient-text">Dashboard</h1>
+                        <p class="lead">Manage your coding rooms and projects</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-5" data-aos="fade-up">
+                    <div class="col-md-6 mb-4">
+                        <div class="glass-card p-4 h-100">
+                            <h4 class="fw-bold mb-4">Create New Room</h4>
+                            <p class="mb-4">Start a new collaborative coding session with your team.</p>
+                            <button class="btn btn-primary-custom" onclick="showSection('createRoom')">
+                                <i class="fas fa-plus-circle me-2"></i> Create Room
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="glass-card p-4 h-100">
+                            <h4 class="fw-bold mb-4">Join Existing Room</h4>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="roomIdInput" placeholder="Enter Room ID">
+                                <button class="btn btn-primary" id="joinRoomBtn">
+                                    <i class="fas fa-sign-in-alt me-1"></i> Join
+                                </button>
+                            </div>
+                            <p class="small text-muted">Get the Room ID from your team member</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" data-aos="fade-up">
+                    <div class="col-12 mb-4">
+                        <h3 class="fw-bold">Recent Projects</h3>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="glass-card p-4 h-100 hover-effect">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">E-commerce API</h5>
+                                    <p class="text-muted small">Last active: 2 hours ago</p>
+                                </div>
+                                <span class="badge bg-success">JavaScript</span>
+                            </div>
+                            <p class="mb-3">Backend API for online shopping platform with Node.js and Express.</p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-code me-1"></i> Open
+                                </button>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-users me-1 text-primary"></i>
+                                    <small>3 participants</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="glass-card p-4 h-100 hover-effect">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">React Dashboard UI</h5>
+                                    <p class="text-muted small">Last active: 1 day ago</p>
+                                </div>
+                                <span class="badge bg-info">React</span>
+                            </div>
+                            <p class="mb-3">Admin dashboard UI with React, Chart.js, and Tailwind CSS.</p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-code me-1"></i> Open
+                                </button>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-users me-1 text-primary"></i>
+                                    <small>2 participants</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="glass-card p-4 h-100 hover-effect">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold">Python ML Model</h5>
+                                    <p class="text-muted small">Last active: 3 days ago</p>
+                                </div>
+                                <span class="badge bg-warning">Python</span>
+                            </div>
+                            <p class="mb-3">Machine learning model for sentiment analysis using TensorFlow.</p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-sm btn-outline-primary" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-code me-1"></i> Open
+                                </button>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-users me-1 text-primary"></i>
+                                    <small>4 participants</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Create/Join Room Section -->
+        <section id="createRoom" class="section">
+            <div class="container py-5">
+                <div class="row justify-content-center align-items-center min-vh-80">
+                    <div class="col-md-8 col-lg-6" data-aos="zoom-in">
+                        <div class="glass-card p-4 p-md-5">
+                            <div class="text-center mb-5">
+                                <h2 class="fw-bold gradient-text">Create a New Room</h2>
+                                <p class="text-muted">Start a collaborative coding session</p>
+                            </div>
+                            
+                            <form id="roomForm">
+                                <div class="mb-4">
+                                    <label for="roomName" class="form-label">Room Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+                                        <input type="text" class="form-control" id="roomName" placeholder="My Awesome Project" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="roomDescription" class="form-label">Description (Optional)</label>
+                                    <textarea class="form-control" id="roomDescription" rows="3" placeholder="Describe what you'll be working on..."></textarea>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="programmingLanguage" class="form-label">Primary Language</label>
+                                    <select class="form-select" id="programmingLanguage">
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="java">Java</option>
+                                        <option value="cpp">C++</option>
+                                        <option value="php">PHP</option>
+                                        <option value="ruby">Ruby</option>
+                                        <option value="go">Go</option>
+                                        <option value="rust">Rust</option>
+                                        <option value="typescript">TypeScript</option>
+                                        <option value="html">HTML/CSS</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Visibility</label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="roomVisibility" id="publicRoom" checked>
+                                        <label class="form-check-label" for="publicRoom">
+                                            <i class="fas fa-globe me-2"></i> Public (Anyone with link can join)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="roomVisibility" id="privateRoom">
+                                        <label class="form-check-label" for="privateRoom">
+                                            <i class="fas fa-lock me-2"></i> Private (Only invited users can join)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary-custom">
+                                        <i class="fas fa-rocket me-2"></i> Create Room & Start Coding
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="showSection('dashboard')">
+                                        <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Code Editor Section -->
+        <section id="codeEditor" class="section">
+            <div class="container-fluid p-0 h-100">
+                <div class="row g-0 h-100">
+                    <!-- Sidebar -->
+                    <div class="col-lg-2 col-md-3 d-flex flex-column border-end border-secondary" style="background-color: var(--dark);">
+                        <div class="p-3 border-bottom border-secondary">
+                            <h5 class="fw-bold mb-0">HackHub Editor</h5>
+                            <small class="text-muted">Room: <span id="roomNameDisplay">JavaScript Project</span></small>
+                        </div>
+                        
+                        <div class="p-3 border-bottom border-secondary">
+                            <h6 class="fw-bold mb-3">Participants (4)</h6>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-2">
+                                    <img src="https://ui-avatars.com/api/?name=You&background=6366f1&color=fff" class="rounded-circle" width="36" height="36" alt="You">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">You</div>
+                                    <small class="text-muted">Host</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-2">
+                                    <img src="https://ui-avatars.com/api/?name=Alex&background=10b981&color=fff" class="rounded-circle" width="36" height="36" alt="Alex">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Alex Johnson</div>
+                                    <small class="text-muted">Editing</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-2">
+                                    <img src="https://ui-avatars.com/api/?name=Sam&background=f59e0b&color=fff" class="rounded-circle" width="36" height="36" alt="Sam">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Sam Wilson</div>
+                                    <small class="text-muted">Viewing</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="position-relative me-2">
+                                    <img src="https://ui-avatars.com/api/?name=Taylor&background=8b5cf6&color=fff" class="rounded-circle" width="36" height="36" alt="Taylor">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-warning border border-light rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Taylor Swift</div>
+                                    <small class="text-muted">Away</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-3 border-bottom border-secondary">
+                            <h6 class="fw-bold mb-3">File Explorer</h6>
+                            <div class="mb-2">
+                                <i class="fas fa-folder text-warning me-2"></i>
+                                <span>src</span>
+                            </div>
+                            <div class="ms-4 mb-1">
+                                <i class="fas fa-file-code text-primary me-2"></i>
+                                <span>index.js</span>
+                            </div>
+                            <div class="ms-4 mb-1">
+                                <i class="fas fa-file-code text-danger me-2"></i>
+                                <span>styles.css</span>
+                            </div>
+                            <div class="ms-4 mb-1">
+                                <i class="fas fa-file-code text-success me-2"></i>
+                                <span>index.html</span>
+                            </div>
+                            <div class="mb-2 mt-3">
+                                <i class="fas fa-folder text-warning me-2"></i>
+                                <span>public</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-3 mt-auto">
+                            <button class="btn btn-primary w-100 mb-2" onclick="showSection('videoCall')">
+                                <i class="fas fa-video me-2"></i> Video Call
+                            </button>
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="showSection('chat')">
+                                <i class="fas fa-comments me-2"></i> Chat
+                            </button>
+                            <button class="btn btn-outline-secondary w-100" onclick="showSection('dashboard')">
+                                <i class="fas fa-sign-out-alt me-2"></i> Exit Room
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Editor Area -->
+                    <div class="col-lg-8 col-md-9 d-flex flex-column">
+                        <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown me-3">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-code me-2"></i> JavaScript
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-js-square text-warning me-2"></i>JavaScript</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-python text-primary me-2"></i>Python</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fab fa-java text-danger me-2"></i>Java</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-code text-info me-2"></i>C++</a></li>
+                                    </ul>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="me-3">index.js</div>
+                                    <div class="me-3 text-muted">styles.css</div>
+                                    <div class="me-3 text-muted">index.html</div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-success me-2" onclick="runCode()">
+                                    <i class="fas fa-play me-2"></i> Run Code
+                                </button>
+                                <button class="btn btn-outline-secondary">
+                                    <i class="fas fa-share me-2"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow-1 position-relative">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 p-3">
+                                <div class="row h-100 g-0">
+                                    <!-- Line Numbers -->
+                                    <div class="col-1 h-100 overflow-auto">
+                                        <div class="editor-line-numbers">
+                                            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Code Editor -->
+                                    <div class="col-11 h-100 overflow-auto">
+                                        <div class="code-font p-2" style="font-size: 14px; line-height: 1.5;">
+                                            <div><span style="color: #569cd6;">// Welcome to HackHub Code Editor</span></div>
+                                            <div><span style="color: #569cd6;">// This is a simulated JavaScript editor</span></div>
+                                            <div><span style="color: #569cd6;">// Multiple people can edit this code simultaneously</span></div>
+                                            <div><br></div>
+                                            <div><span style="color: #c586c0;">const</span> <span style="color: #9cdcfe;">message</span> = <span style="color: #ce9178;">"Hello from HackHub!"</span>;</div>
+                                            <div><br></div>
+                                            <div><span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">greetUser</span>(<span style="color: #9cdcfe;">name</span>) {</div>
+                                            <div>&nbsp;&nbsp;<span style="color: #c586c0;">return</span> <span style="color: #ce9178;">`Hello, </span><span style="color: #d7ba7d;">${</span><span style="color: #9cdcfe;">name</span><span style="color: #d7ba7d;">}</span><span style="color: #ce9178;">! Welcome to collaborative coding.`</span>;</div>
+                                            <div>}</div>
+                                            <div><br></div>
+                                            <div><span style="color: #c586c0;">const</span> <span style="color: #9cdcfe;">userName</span> = <span style="color: #ce9178;">"Developer"</span>;</div>
+                                            <div><span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #dcdcaa;">greetUser</span>(<span style="color: #9cdcfe;">userName</span>));</div>
+                                            <div><span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #ce9178;">"Current time:"</span>, <span style="color: #9cdcfe;">new</span> <span style="color: #4ec9b0;">Date</span>().<span style="color: #dcdcaa;">toLocaleTimeString</span>());</div>
+                                            <div><br></div>
+                                            <div><span style="color: #569cd6;">// Example array manipulation</span></div>
+                                            <div><span style="color: #c586c0;">const</span> <span style="color: #9cdcfe;">numbers</span> = [<span style="color: #b5cea8;">1</span>, <span style="color: #b5cea8;">2</span>, <span style="color: #b5cea8;">3</span>, <span style="color: #b5cea8;">4</span>, <span style="color: #b5cea8;">5</span>];</div>
+                                            <div><span style="color: #c586c0;">const</span> <span style="color: #9cdcfe;">squared</span> = <span style="color: #9cdcfe;">numbers</span>.<span style="color: #dcdcaa;">map</span>(<span style="color: #9cdcfe;">num</span> => <span style="color: #9cdcfe;">num</span> * <span style="color: #9cdcfe;">num</span>);</div>
+                                            <div><span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #ce9178;">"Squared numbers:"</span>, <span style="color: #9cdcfe;">squared</span>);</div>
+                                            <div><br></div>
+                                            <div><span style="color: #569cd6;">// Example async function</span></div>
+                                            <div><span style="color: #569cd6;">async</span> <span style="color: #c586c0;">function</span> <span style="color: #dcdcaa;">fetchData</span>() {</div>
+                                            <div>&nbsp;&nbsp;<span style="color: #c586c0;">try</span> {</div>
+                                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #c586c0;">const</span> <span style="color: #9cdcfe;">response</span> = <span style="color: #c586c0;">await</span> <span style="color: #dcdcaa;">fetch</span>(<span style="color: #ce9178;">'https://api.example.com/data'</span>);</div>
+                                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #c586c0;">const</span> <span style="color: #9cdcfe;">data</span> = <span style="color: #c586c0;">await</span> <span style="color: #9cdcfe;">response</span>.<span style="color: #dcdcaa;">json</span>();</div>
+                                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">log</span>(<span style="color: #ce9178;">"Data fetched:"</span>, <span style="color: #9cdcfe;">data</span>);</div>
+                                            <div>&nbsp;&nbsp;} <span style="color: #c586c0;">catch</span> (<span style="color: #9cdcfe;">error</span>) {</div>
+                                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #9cdcfe;">console</span>.<span style="color: #dcdcaa;">error</span>(<span style="color: #ce9178;">"Error fetching data:"</span>, <span style="color: #9cdcfe;">error</span>);</div>
+                                            <div>&nbsp;&nbsp;}</div>
+                                            <div>}</div>
+                                            <div><br></div>
+                                            <div><span style="color: #569cd6;">// Call the async function</span></div>
+                                            <div><span style="color: #dcdcaa;">fetchData</span>();</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Output Console -->
+                        <div class="border-top border-secondary" style="height: 200px;">
+                            <div class="p-2 border-bottom border-secondary d-flex justify-content-between">
+                                <h6 class="fw-bold mb-0">Output Console</h6>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="clearConsole()">
+                                    <i class="fas fa-trash me-1"></i> Clear
+                                </button>
+                            </div>
+                            <div class="p-2 h-100 overflow-auto" id="consoleOutput" style="font-family: 'Fira Code', monospace; font-size: 13px; background-color: #1a1a1a;">
+                                <div class="text-success">> node index.js</div>
+                                <div class="text-primary">Hello, Developer! Welcome to collaborative coding.</div>
+                                <div class="text-primary">Current time: <span id="currentTime">10:30:45 AM</span></div>
+                                <div class="text-primary">Squared numbers: [1, 4, 9, 16, 25]</div>
+                                <div class="text-warning">Fetching data from https://api.example.com/data...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Sidebar (Chat/Video) -->
+                    <div class="col-lg-2 d-none d-lg-block border-start border-secondary p-0" style="background-color: var(--dark);">
+                        <div class="h-100 d-flex flex-column">
+                            <div class="p-3 border-bottom border-secondary">
+                                <h6 class="fw-bold mb-0">Quick Actions</h6>
+                            </div>
+                            <div class="p-3">
+                                <button class="btn btn-outline-primary w-100 mb-2" onclick="showSection('videoCall')">
+                                    <i class="fas fa-video me-2"></i> Start Video Call
+                                </button>
+                                <button class="btn btn-outline-success w-100 mb-2" onclick="showSection('chat')">
+                                    <i class="fas fa-comment-dots me-2"></i> Open Chat
+                                </button>
+                                <button class="btn btn-outline-warning w-100 mb-4" onclick="showSection('dashboard')">
+                                    <i class="fas fa-home me-2"></i> Dashboard
+                                </button>
+                                
+                                <h6 class="fw-bold mb-3">Room Settings</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="autoSave" checked>
+                                    <label class="form-check-label" for="autoSave">Auto Save</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="lineNumbers" checked>
+                                    <label class="form-check-label" for="lineNumbers">Line Numbers</label>
+                                </div>
+                                <div class="form-check form-switch mb-4">
+                                    <input class="form-check-input" type="checkbox" id="syntaxHighlighting" checked>
+                                    <label class="form-check-label" for="syntaxHighlighting">Syntax Highlighting</label>
+                                </div>
+                                
+                                <h6 class="fw-bold mb-3">Share Room</h6>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control form-control-sm" value="https://hackhub.dev/room/abc123" readonly>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="copyRoomLink()">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Video Call Section -->
+        <section id="videoCall" class="section">
+            <div class="container-fluid p-0 h-100">
+                <div class="row g-0 h-100">
+                    <div class="col-lg-9 p-0">
+                        <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                            <h4 class="fw-bold mb-0">Video Call</h4>
+                            <div>
+                                <button class="btn btn-outline-danger me-2" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-phone-slash me-2"></i> End Call
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-times me-2"></i> Close
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="p-3">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="video-placeholder h-100" style="min-height: 300px;">
+                                        <div class="text-center">
+                                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 100px; height: 100px;">
+                                                <i class="fas fa-user fa-3x text-white"></i>
+                                            </div>
+                                            <h5>You</h5>
+                                            <div class="d-flex justify-content-center mt-3">
+                                                <span class="badge bg-success me-2">
+                                                    <i class="fas fa-microphone me-1"></i> On
+                                                </span>
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-video me-1"></i> On
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="video-placeholder h-100" style="min-height: 300px;">
+                                        <div class="text-center">
+                                            <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 100px; height: 100px;">
+                                                <i class="fas fa-user fa-3x text-white"></i>
+                                            </div>
+                                            <h5>Alex Johnson</h5>
+                                            <div class="d-flex justify-content-center mt-3">
+                                                <span class="badge bg-success me-2">
+                                                    <i class="fas fa-microphone me-1"></i> On
+                                                </span>
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-video me-1"></i> On
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="video-placeholder h-100" style="min-height: 300px;">
+                                        <div class="text-center">
+                                            <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 100px; height: 100px;">
+                                                <i class="fas fa-user fa-3x text-white"></i>
+                                            </div>
+                                            <h5>Sam Wilson</h5>
+                                            <div class="d-flex justify-content-center mt-3">
+                                                <span class="badge bg-danger me-2">
+                                                    <i class="fas fa-microphone-slash me-1"></i> Off
+                                                </span>
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-video me-1"></i> On
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="video-placeholder h-100" style="min-height: 300px;">
+                                        <div class="text-center">
+                                            <div class="rounded-circle bg-info d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 100px; height: 100px;">
+                                                <i class="fas fa-user fa-3x text-white"></i>
+                                            </div>
+                                            <h5>Taylor Swift</h5>
+                                            <div class="d-flex justify-content-center mt-3">
+                                                <span class="badge bg-danger me-2">
+                                                    <i class="fas fa-microphone-slash me-1"></i> Off
+                                                </span>
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-video-slash me-1"></i> Off
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 border-start border-secondary p-0">
+                        <div class="h-100 d-flex flex-column">
+                            <div class="p-3 border-bottom border-secondary">
+                                <h6 class="fw-bold mb-0">Call Controls</h6>
+                            </div>
+                            
+                            <div class="p-3 flex-grow-1">
+                                <div class="d-grid gap-2 mb-4">
+                                    <button class="btn btn-outline-primary" id="toggleMic">
+                                        <i class="fas fa-microphone me-2"></i> Mute Microphone
+                                    </button>
+                                    <button class="btn btn-outline-primary" id="toggleCamera">
+                                        <i class="fas fa-video me-2"></i> Turn Off Camera
+                                    </button>
+                                    <button class="btn btn-outline-success">
+                                        <i class="fas fa-desktop me-2"></i> Share Screen
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-users me-2"></i> Invite People
+                                    </button>
+                                </div>
+                                
+                                <h6 class="fw-bold mb-3">Participants (4)</h6>
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-primary rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">You</div>
+                                            <small class="text-success">Connected</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-success rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Alex Johnson</div>
+                                            <small class="text-success">Connected</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bg-warning rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Sam Wilson</div>
+                                            <small class="text-warning">Camera Only</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-info rounded-circle p-2 me-2">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Taylor Swift</div>
+                                            <small class="text-danger">Disconnected</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 border-top border-secondary">
+                                <button class="btn btn-danger w-100" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-phone-slash me-2"></i> Leave Call
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Chat Section -->
+        <section id="chat" class="section">
+            <div class="container-fluid p-0 h-100">
+                <div class="row g-0 h-100">
+                    <div class="col-lg-9 p-0 h-100 d-flex flex-column">
+                        <div class="p-3 border-bottom border-secondary d-flex justify-content-between align-items-center">
+                            <h4 class="fw-bold mb-0">Team Chat</h4>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm me-2">
+                                    <i class="fas fa-user-plus me-1"></i> Add People
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="showSection('codeEditor')">
+                                    <i class="fas fa-times me-1"></i> Close
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow-1 p-3 overflow-auto" id="chatMessages">
+                            <div class="d-flex flex-column">
+                                <div class="message-bubble other">
+                                    <div class="fw-bold">Alex Johnson</div>
+                                    <div>Hey team! I've just updated the login form validation logic.</div>
+                                    <div class="text-end small text-muted mt-1">10:15 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble user">
+                                    <div class="fw-bold">You</div>
+                                    <div>Great! I'll review it. Did you also add the password strength indicator?</div>
+                                    <div class="text-end small text-muted mt-1">10:16 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="fw-bold">Sam Wilson</div>
+                                    <div>Yes, the password strength meter is working. I also fixed the mobile responsiveness issue.</div>
+                                    <div class="text-end small text-muted mt-1">10:18 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="fw-bold">Alex Johnson</div>
+                                    <div>I noticed a bug in the dashboard page. The recent projects list doesn't update when a new project is created.</div>
+                                    <div class="text-end small text-muted mt-1">10:20 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble user">
+                                    <div class="fw-bold">You</div>
+                                    <div>I'll take a look at that. Can you assign it to me?</div>
+                                    <div class="text-end small text-muted mt-1">10:21 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="fw-bold">Taylor Swift</div>
+                                    <div>Sorry I'm late! My internet was down. What did I miss?</div>
+                                    <div class="text-end small text-muted mt-1">10:25 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="fw-bold">Sam Wilson</div>
+                                    <div>Welcome back Taylor! We're discussing the dashboard bug and login form updates.</div>
+                                    <div class="text-end small text-muted mt-1">10:26 AM</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="fw-bold">Alex Johnson</div>
+                                    <div>Taylor, can you review the PR for the notification system when you get a chance?</div>
+                                    <div class="text-end small text-muted mt-1">10:27 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-3 border-top border-secondary">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="chatInput" placeholder="Type your message...">
+                                <button class="btn btn-outline-secondary" type="button" id="emojiBtn">
+                                    <i class="far fa-smile"></i>
+                                </button>
+                                <button class="btn btn-primary" type="button" id="sendMessageBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="d-flex mt-2">
+                                <button class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="fas fa-paperclip"></i> Attach
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary me-2">
+                                    <i class="fas fa-code"></i> Code
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-bold"></i> Format
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 border-start border-secondary p-0">
+                        <div class="h-100 d-flex flex-column">
+                            <div class="p-3 border-bottom border-secondary">
+                                <h6 class="fw-bold mb-0">Chat Members</h6>
+                            </div>
+                            
+                            <div class="p-3">
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="position-relative me-2">
+                                            <img src="https://ui-avatars.com/api/?name=You&background=6366f1&color=fff" class="rounded-circle" width="40" height="40" alt="You">
+                                            <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">You</div>
+                                            <small class="text-muted">Online</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="position-relative me-2">
+                                            <img src="https://ui-avatars.com/api/?name=Alex&background=10b981&color=fff" class="rounded-circle" width="40" height="40" alt="Alex">
+                                            <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Alex Johnson</div>
+                                            <small class="text-muted">Typing...</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="position-relative me-2">
+                                            <img src="https://ui-avatars.com/api/?name=Sam&background=f59e0b&color=fff" class="rounded-circle" width="40" height="40" alt="Sam">
+                                            <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Sam Wilson</div>
+                                            <small class="text-muted">Online</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="position-relative me-2">
+                                            <img src="https://ui-avatars.com/api/?name=Taylor&background=8b5cf6&color=fff" class="rounded-circle" width="40" height="40" alt="Taylor">
+                                            <span class="position-absolute bottom-0 end-0 p-1 bg-warning border border-light rounded-circle"></span>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">Taylor Swift</div>
+                                            <small class="text-muted">Away</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="fw-bold mb-3">Quick Actions</h6>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-code me-2"></i> Send Code Snippet
+                                    </button>
+                                    <button class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-video me-2"></i> Start Video Call
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-share me-2"></i> Share File
+                                    </button>
+                                    <button class="btn btn-outline-info btn-sm mb-4">
+                                        <i class="fas fa-history me-2"></i> Chat History
+                                    </button>
+                                </div>
+                                
+                                <h6 class="fw-bold mb-3">Chat Settings</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="soundNotifications" checked>
+                                    <label class="form-check-label" for="soundNotifications">Sound Notifications</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="messageReadReceipts" checked>
+                                    <label class="form-check-label" for="messageReadReceipts">Read Receipts</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="typingIndicators" checked>
+                                    <label class="form-check-label" for="typingIndicators">Typing Indicators</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Profile Section -->
+        <section id="profile" class="section">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="glass-card p-4 p-md-5" data-aos="zoom-in">
+                            <div class="text-center mb-5">
+                                <div class="position-relative d-inline-block mb-3">
+                                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff&size=150" class="rounded-circle border border-4 border-primary" width="150" height="150" alt="Profile">
+                                    <button class="btn btn-primary rounded-circle position-absolute bottom-0 end-0">
+                                        <i class="fas fa-camera"></i>
+                                    </button>
+                                </div>
+                                <h2 class="fw-bold gradient-text">John Doe</h2>
+                                <p class="text-muted">Senior Full Stack Developer</p>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <span class="badge bg-primary">JavaScript</span>
+                                    <span class="badge bg-success">React</span>
+                                    <span class="badge bg-warning">Node.js</span>
+                                    <span class="badge bg-info">Python</span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="fw-bold mb-3">Personal Information</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Full Name</label>
+                                        <div class="form-control">John Doe</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Email Address</label>
+                                        <div class="form-control">john.doe@example.com</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Member Since</label>
+                                        <div class="form-control">March 15, 2023</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <h5 class="fw-bold mb-3">Account Settings</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Theme Preference</label>
+                                        <div class="d-flex align-items-center">
+                                            <span class="me-3">Dark</span>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="profileThemeToggle" onclick="toggleTheme()">
+                                                <label class="form-check-label" for="profileThemeToggle">
+                                                    <i class="fas fa-sun"></i>
+                                                </label>
+                                            </div>
+                                            <span class="ms-3">Light</span>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted">Email Notifications</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                            <label class="form-check-label" for="emailNotifications">Receive email notifications</label>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label text-muted">Two-Factor Authentication</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                                            <label class="form-check-label" for="twoFactorAuth">Enable 2FA</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-5">
+                                <h5 class="fw-bold mb-3">Activity Summary</h5>
+                                <div class="row">
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="glass-card p-3 text-center">
+                                            <div class="display-6 fw-bold gradient-text">24</div>
+                                            <div class="text-muted">Projects</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="glass-card p-3 text-center">
+                                            <div class="display-6 fw-bold gradient-text">156</div>
+                                            <div class="text-muted">Sessions</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="glass-card p-3 text-center">
+                                            <div class="display-6 fw-bold gradient-text">89</div>
+                                            <div class="text-muted">Collaborators</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="glass-card p-3 text-center">
+                                            <div class="display-6 fw-bold gradient-text">42</div>
+                                            <div class="text-muted">Code Runs</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary-custom" onclick="showSection('dashboard')">
+                                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="showSection('home')">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section id="features" class="section">
+            <div class="container py-5">
+                <div class="row mb-5">
+                    <div class="col-12 text-center">
+                        <h1 class="display-4 fw-bold gradient-text mb-3">Features</h1>
+                        <p class="lead">Everything you need for collaborative coding in one platform</p>
+                    </div>
+                </div>
+                
+                <div class="row mb-5" data-aos="fade-up">
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 text-center hover-effect">
+                            <div class="bg-primary bg-gradient rounded-circle p-4 d-inline-block mb-4">
+                                <i class="fas fa-code fa-3x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Real-time Code Editor</h4>
+                            <p class="mb-0">Multiple developers can edit the same code simultaneously with live cursor tracking, syntax highlighting, and instant updates.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 text-center hover-effect">
+                            <div class="bg-success bg-gradient rounded-circle p-4 d-inline-block mb-4">
+                                <i class="fas fa-video fa-3x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Integrated Video Calls</h4>
+                            <p class="mb-0">High-quality video and audio calls without leaving the editor. Perfect for remote pair programming and team meetings.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 text-center hover-effect">
+                            <div class="bg-warning bg-gradient rounded-circle p-4 d-inline-block mb-4">
+                                <i class="fas fa-comments fa-3x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Team Chat & Collaboration</h4>
+                            <p class="mb-0">Rich text chat with code snippet support, file sharing, and emoji reactions to keep the conversation flowing.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-5" data-aos="fade-up">
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 text-center hover-effect">
+                            <div class="bg-info bg-gradient rounded-circle p-4 d-inline-block mb-4">
+                                <i class="fas fa-play-circle fa-3x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Code Execution</h4>
+                            <p class="mb-0">Run your code directly in the browser with our secure sandbox environment. Supports 50+ programming languages.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 text-center hover-effect">
+                            <div class="bg-danger bg-gradient rounded-circle p-4 d-inline-block mb-4">
+                                <i class="fas fa-shield-alt fa-3x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Secure & Private</h4>
+                            <p class="mb-0">End-to-end encryption for all your code and communications. Choose between public and private rooms.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-4">
+                        <div class="glass-card h-100 p-4 text-center hover-effect">
+                            <div class="bg-purple bg-gradient rounded-circle p-4 d-inline-block mb-4">
+                                <i class="fas fa-mobile-alt fa-3x text-white"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Fully Responsive</h4>
+                            <p class="mb-0">Access HackHub from any device - desktop, tablet, or mobile. The interface adapts perfectly to your screen size.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" data-aos="fade-up">
+                    <div class="col-12 text-center">
+                        <button class="btn btn-primary-custom btn-lg" onclick="showSection('register')">
+                            <i class="fas fa-rocket me-2"></i> Get Started for Free
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 404 Section -->
+        <section id="page404" class="section">
+            <div class="container py-5">
+                <div class="row justify-content-center align-items-center min-vh-80">
+                    <div class="col-md-8 col-lg-6 text-center" data-aos="zoom-in">
+                        <div class="glass-card p-5">
+                            <h1 class="display-1 fw-bold gradient-text">404</h1>
+                            <h3 class="fw-bold mb-4">Page Not Found</h3>
+                            <p class="mb-5">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+                            <div class="d-flex justify-content-center gap-3">
+                                <button class="btn btn-primary-custom" onclick="showSection('home')">
+                                    <i class="fas fa-home me-2"></i> Back to Home
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="showSection('dashboard')">
+                                    <i class="fas fa-tachometer-alt me-2"></i> Go to Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="glass-card mt-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h3 class="fw-bold gradient-text">HackHub</h3>
+                    <p class="mt-3">A collaborative coding platform for developers to code together in real-time with integrated video, chat, and code execution.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="#" class="text-primary"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class="text-primary"><i class="fab fa-github fa-2x"></i></a>
+                        <a href="#" class="text-primary"><i class="fab fa-discord fa-2x"></i></a>
+                        <a href="#" class="text-primary"><i class="fab fa-linkedin fa-2x"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5 class="fw-bold mb-4">Product</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none" onclick="showSection('features')">Features</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none" onclick="showSection('dashboard')">Dashboard</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none" onclick="showSection('codeEditor')">Code Editor</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none" onclick="showSection('videoCall')">Video Calls</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5 class="fw-bold mb-4">Company</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Careers</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Blog</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5 class="fw-bold mb-4">Legal</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Cookie Policy</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">GDPR</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 mb-4">
+                    <h5 class="fw-bold mb-4">Get Help</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Support Center</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Documentation</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">API Reference</a></li>
+                        <li class="mb-2"><a href="#" class="text-decoration-none">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2023 HackHub. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>Made with <i class="fas fa-heart text-danger"></i> for developers worldwide</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+        
+        // DOM elements
+        const sections = document.querySelectorAll('.section');
+        const loadingBar = document.getElementById('loadingBar');
+        const themeToggle = document.getElementById('themeToggle');
+        const profileThemeToggle = document.getElementById('profileThemeToggle');
+        
+        // Show loading animation on page load
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                loadingBar.style.display = 'none';
+            }, 1500);
+            
+            // Update time in code editor
+            updateTime();
+        });
+        
+        // Show a specific section and hide others
+        function showSection(sectionId) {
+            // Hide all sections
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show the selected section
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // Update active nav link
+                updateActiveNav(sectionId);
+                
+                // Trigger animations for the new section
+                setTimeout(() => {
+                    AOS.refresh();
+                }, 100);
+            } else {
+                // If section doesn't exist, show 404
+                showSection('page404');
+            }
+            
+            // Close mobile navbar if open
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            if (navbarCollapse.classList.contains('show')) {
+                const navbarToggler = document.querySelector('.navbar-toggler');
+                navbarToggler.click();
+            }
+            
+            return false; // Prevent default link behavior
+        }
+        
+        // Update active navigation link
+        function updateActiveNav(sectionId) {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                
+                // Check if link corresponds to current section
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(sectionId)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Toggle dark/light theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            
+            // Update toggle switches
+            if (themeToggle) themeToggle.checked = newTheme === 'light';
+            if (profileThemeToggle) profileThemeToggle.checked = newTheme === 'light';
+            
+            // Save preference to localStorage
+            localStorage.setItem('hackhub-theme', newTheme);
+        }
+        
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('hackhub-theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'light') {
+                if (themeToggle) themeToggle.checked = true;
+                if (profileThemeToggle) profileThemeToggle.checked = true;
+            }
+        }
+        
+        // Password strength indicator
+        const passwordInput = document.getElementById('registerPassword');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordStrengthText = document.getElementById('passwordStrengthText');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const passwordMatch = document.getElementById('passwordMatch');
+        
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                // Check password strength
+                if (password.length >= 8) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                
+                // Update strength indicator
+                passwordStrength.className = 'password-strength';
+                if (strength === 0) {
+                    passwordStrength.classList.add('weak');
+                    passwordStrengthText.textContent = 'Weak';
+                } else if (strength <= 2) {
+                    passwordStrength.classList.add('medium');
+                    passwordStrengthText.textContent = 'Medium';
+                } else {
+                    passwordStrength.classList.add('strong');
+                    passwordStrengthText.textContent = 'Strong';
+                }
+                
+                // Check password match
+                checkPasswordMatch();
+            });
+        }
+        
+        if (confirmPassword) {
+            confirmPassword.addEventListener('input', checkPasswordMatch);
+        }
+        
+        function checkPasswordMatch() {
+            if (passwordInput && confirmPassword) {
+                if (confirmPassword.value === '') {
+                    passwordMatch.textContent = '';
+                } else if (passwordInput.value === confirmPassword.value) {
+                    passwordMatch.textContent = 'Passwords match!';
+                    passwordMatch.style.color = 'var(--secondary)';
+                } else {
+                    passwordMatch.textContent = 'Passwords do not match';
+                    passwordMatch.style.color = '#ef4444';
+                }
+            }
+        }
+        
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+        
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('loginPassword');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+        
+        if (toggleRegisterPassword) {
+            toggleRegisterPassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('registerPassword');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+        
+        // Form submissions
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const roomForm = document.getElementById('roomForm');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Login functionality would connect to backend in a real application. For this demo, you are now logged in.');
+                showSection('dashboard');
+            });
+        }
+        
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Registration successful! Welcome to HackHub.');
+                showSection('dashboard');
+            });
+        }
+        
+        if (roomForm) {
+            roomForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const roomName = document.getElementById('roomName').value;
+                document.getElementById('roomNameDisplay').textContent = roomName;
+                alert(`Room "${roomName}" created successfully! Redirecting to code editor...`);
+                showSection('codeEditor');
+            });
+        }
+        
+        // Join room button
+        const joinRoomBtn = document.getElementById('joinRoomBtn');
+        if (joinRoomBtn) {
+            joinRoomBtn.addEventListener('click', function() {
+                const roomId = document.getElementById('roomIdInput').value;
+                if (roomId.trim() === '') {
+                    alert('Please enter a room ID');
+                } else {
+                    alert(`Joining room with ID: ${roomId}. In a real app, this would connect you to the existing room.`);
+                    showSection('codeEditor');
+                }
+            });
+        }
+        
+        // Run code simulation
+        function runCode() {
+            const consoleOutput = document.getElementById('consoleOutput');
+            const currentTime = document.getElementById('currentTime');
+            
+            // Update time
+            updateTime();
+            
+            // Add new output
+            const newOutput = document.createElement('div');
+            newOutput.className = 'text-success mb-2';
+            newOutput.textContent = '> node index.js';
+            
+            const outputText = document.createElement('div');
+            outputText.className = 'text-primary';
+            outputText.innerHTML = `
+                Hello, Developer! Welcome to collaborative coding.<br>
+                Current time: ${new Date().toLocaleTimeString()}<br>
+                Squared numbers: [1, 4, 9, 16, 25]<br>
+                Data fetched: {status: "success", data: {id: 1, name: "Sample Data"}}
+            `;
+            
+            consoleOutput.prepend(outputText);
+            consoleOutput.prepend(newOutput);
+            
+            // Scroll to top
+            consoleOutput.scrollTop = 0;
+            
+            // Show success message
+            showNotification('Code executed successfully!', 'success');
+        }
+        
+        // Clear console
+        function clearConsole() {
+            const consoleOutput = document.getElementById('consoleOutput');
+            consoleOutput.innerHTML = '<div class="text-success">> node index.js</div><div class="text-primary">Console cleared. Run code to see output.</div>';
+        }
+        
+        // Update time in editor
+        function updateTime() {
+            const currentTimeElement = document.getElementById('currentTime');
+            if (currentTimeElement) {
+                currentTimeElement.textContent = new Date().toLocaleTimeString();
+            }
+        }
+        
+        // Copy room link
+        function copyRoomLink() {
+            const roomLink = 'https://hackhub.dev/room/abc123';
+            navigator.clipboard.writeText(roomLink).then(() => {
+                showNotification('Room link copied to clipboard!', 'success');
+            });
+        }
+        
+        // Chat functionality
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+        
+        if (sendMessageBtn && chatInput) {
+            sendMessageBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+        
+        function sendMessage() {
+            if (!chatInput || chatInput.value.trim() === '') return;
+            
+            const messageText = chatInput.value;
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            // Create message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-bubble user';
+            messageDiv.innerHTML = `
+                <div class="fw-bold">You</div>
+                <div>${messageText}</div>
+                <div class="text-end small text-muted mt-1">${time}</div>
+            `;
+            
+            // Add to chat
+            chatMessages.appendChild(messageDiv);
+            
+            // Clear input
+            chatInput.value = '';
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Simulate reply after 1-3 seconds
+            setTimeout(simulateReply, 1000 + Math.random() * 2000);
+        }
+        
+        function simulateReply() {
+            const replies = [
+                "That's a great point!",
+                "I'll work on that next.",
+                "Can you review my changes?",
+                "Let's schedule a meeting to discuss.",
+                "I found a bug in the implementation.",
+                "The tests are passing now.",
+                "I need help with this function."
+            ];
+            
+            const users = ['Alex Johnson', 'Sam Wilson', 'Taylor Swift'];
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            const randomReply = replies[Math.floor(Math.random() * replies.length)];
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-bubble other';
+            messageDiv.innerHTML = `
+                <div class="fw-bold">${randomUser}</div>
+                <div>${randomReply}</div>
+                <div class="text-end small text-muted mt-1">${time}</div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Video call toggle buttons
+        const toggleMic = document.getElementById('toggleMic');
+        const toggleCamera = document.getElementById('toggleCamera');
+        
+        if (toggleMic) {
+            toggleMic.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-microphone')) {
+                    icon.classList.remove('fa-microphone');
+                    icon.classList.add('fa-microphone-slash');
+                    this.innerHTML = '<i class="fas fa-microphone-slash me-2"></i> Unmute Microphone';
+                } else {
+                    icon.classList.remove('fa-microphone-slash');
+                    icon.classList.add('fa-microphone');
+                    this.innerHTML = '<i class="fas fa-microphone me-2"></i> Mute Microphone';
+                }
+            });
+        }
+        
+        if (toggleCamera) {
+            toggleCamera.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-video')) {
+                    icon.classList.remove('fa-video');
+                    icon.classList.add('fa-video-slash');
+                    this.innerHTML = '<i class="fas fa-video-slash me-2"></i> Turn On Camera';
+                } else {
+                    icon.classList.remove('fa-video-slash');
+                    icon.classList.add('fa-video');
+                    this.innerHTML = '<i class="fas fa-video me-2"></i> Turn Off Camera';
+                }
+            });
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `position-fixed top-0 end-0 m-3 p-3 rounded border-0 text-white ${type === 'success' ? 'bg-success' : 'bg-primary'}`;
+            notification.style.zIndex = '9999';
+            notification.style.maxWidth = '300px';
+            notification.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white ms-2" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            // Add to body
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+        
+        // Initialize typing animation
+        setTimeout(() => {
+            const typingText = document.querySelector('.typing-text');
+            if (typingText) {
+                typingText.style.width = '100%';
+                typingText.style.animation = 'none';
+                typingText.style.borderRight = 'none';
+            }
+        }, 3500);
+        
+        // Handle page transitions
+        document.addEventListener('click', function(e) {
+            // Handle internal navigation links
+            if (e.target.matches('a[href="#"]')) {
+                e.preventDefault();
+            }
+        });
+        
+        // Initialize with home section
+        showSection('home');
+    </script>
+</body>
+</html>
