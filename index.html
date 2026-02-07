@@ -147,7 +147,6 @@
                 0 0 40px rgba(139, 92, 246, 0.2);
         }
         
-        /* FIXED: Section Visibility */
         .section {
             display: none;
             opacity: 0;
@@ -480,37 +479,8 @@
             background-clip: text;
         }
         
-        /* FIXED: Responsive adjustments - Improved Navbar */
-        @media (max-width: 992px) {
-            .navbar-collapse {
-                background: rgba(15, 15, 35, 0.98);
-                backdrop-filter: blur(20px);
-                border-radius: 16px;
-                margin-top: 10px;
-                padding: 20px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-            
-            .navbar-nav {
-                padding: 0 !important;
-            }
-            
-            .nav-item {
-                margin: 8px 0;
-            }
-            
-            .nav-link {
-                padding: 12px 16px !important;
-                border-radius: 12px;
-                margin: 4px 0;
-            }
-            
-            .dropdown-menu {
-                background: rgba(20, 20, 40, 0.95);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                margin-top: 5px;
-            }
-            
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
             .mobile-hide {
                 display: none;
             }
@@ -527,25 +497,14 @@
             .stat-number {
                 font-size: 2.5rem;
             }
-        }
-        
-        @media (min-width: 992px) {
-            .navbar-nav .nav-link {
-                font-weight: 500;
-                padding: 8px 16px;
-                border-radius: 8px;
-                transition: all 0.3s ease;
-                margin: 0 4px;
+            
+            /* Improved mobile navigation */
+            .navbar-nav {
+                padding: 20px 0;
             }
             
-            .navbar-nav .nav-link:hover {
-                background: rgba(139, 92, 246, 0.1);
-                transform: translateY(-2px);
-            }
-            
-            .navbar-nav .nav-link.active {
-                background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-                color: white !important;
+            .nav-item {
+                margin: 5px 0;
             }
         }
         
@@ -562,26 +521,25 @@
             pointer-events: none;
         }
         
-        /* Fixed Navbar for all devices */
-        .navbar {
+        /* New: Updated Navigation Styles */
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
             transition: all 0.3s ease;
-            background: rgba(15, 15, 35, 0.95) !important;
-            backdrop-filter: blur(20px) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
         }
         
-        .navbar-toggler {
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            padding: 8px 12px !important;
-            border-radius: 8px !important;
+        .navbar-nav .nav-link:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
         }
         
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3) !important;
-            outline: none !important;
+        .navbar-nav .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white !important;
         }
         
-        /* Section header styling */
+        /* New: Section header styling */
         .section-header {
             position: relative;
             padding-bottom: 20px;
@@ -600,7 +558,7 @@
             border-radius: 2px;
         }
         
-        /* Pricing card styles */
+        /* New: Pricing card styles */
         .pricing-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -627,7 +585,7 @@
             font-weight: 600;
         }
         
-        /* Project card styles */
+        /* New: Project card styles */
         .project-card {
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
@@ -639,7 +597,7 @@
             border-color: var(--primary);
         }
         
-        /* About page styles */
+        /* New: About page styles */
         .team-member-card {
             text-align: center;
             transition: all 0.3s ease;
@@ -657,37 +615,6 @@
             border: 4px solid transparent;
             background: linear-gradient(135deg, var(--primary), var(--secondary)) border-box;
         }
-        
-        /* FIXED: Ensure all content is visible */
-        .container, .container-fluid {
-            visibility: visible !important;
-        }
-        
-        /* Fix for dropdown menu visibility */
-        .dropdown-menu {
-            background: rgba(15, 15, 35, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .dropdown-item {
-            color: var(--light);
-            transition: all 0.3s ease;
-        }
-        
-        .dropdown-item:hover {
-            background: rgba(139, 92, 246, 0.1);
-            color: white;
-        }
-        
-        /* Fix for mobile menu staying open */
-        .navbar-collapse.collapsing,
-        .navbar-collapse.show {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
     </style>
 </head>
 <body>
@@ -697,8 +624,8 @@
     <!-- Particle background -->
     <canvas class="particles" id="particleCanvas"></canvas>
     
-    <!-- Fixed Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top py-3" style="z-index: 1000;">
+    <!-- Updated Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top py-3" style="background: rgba(15, 15, 35, 0.95); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#" onclick="showSection('home')">
                 <div class="bg-primary rounded-circle p-2 me-2">
@@ -707,53 +634,46 @@
                 <span class="display-font fw-bold fs-3 gradient-text">HackHub</span>
             </a>
             
-            <!-- FIXED: Mobile hamburger button -->
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <i class="fas fa-bars text-white"></i>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('home')">Home</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('features')">Features</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('dashboard')">Dashboard</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('codeEditor')">Editor</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('about')">About</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('help')">Help</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('pricing')">Pricing</a>
                     </li>
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-2">
                         <a class="nav-link" href="#" onclick="showSection('trending')">Trending</a>
                     </li>
                     <li class="nav-item dropdown mx-2">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" 
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://ui-avatars.com/api/?name=Developer&background=8b5cf6&color=fff&size=32" 
-                                 class="rounded-circle me-2" width="32" height="32" alt="Profile">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=Developer&background=8b5cf6&color=fff&size=32" class="rounded-circle me-2" width="32" height="32" alt="Profile">
                             <span>Account</span>
                         </a>
                         <ul class="dropdown-menu glass-card border-0 p-3">
-                            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="showSection('dashboard')">
-                                <i class="fas fa-tachometer-alt me-3"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt me-3"></i>Dashboard</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="showSection('login')">
-                                <i class="fas fa-sign-in-alt me-3"></i>Login</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="showSection('register')">
-                                <i class="fas fa-user-plus me-3"></i>Register</a></li>
+                            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="showSection('login')"><i class="fas fa-sign-in-alt me-3"></i>Login</a></li>
+                            <li><a class="dropdown-item d-flex align-items-center" href="#" onclick="showSection('register')"><i class="fas fa-user-plus me-3"></i>Register</a></li>
                         </ul>
                     </li>
                     <li class="nav-item ms-3">
@@ -779,8 +699,8 @@
         
         <!-- Home Section -->
         <section id="home" class="section active">
+            <!-- Hero Section -->
             <div class="container py-5">
-                <!-- Hero Section -->
                 <div class="row align-items-center min-vh-80 py-5">
                     <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
                         <div class="mb-4">
@@ -808,7 +728,19 @@
                     <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000">
                         <div class="position-relative">
                             <div class="glass-card p-4 float-animation">
-                                <!-- Editor demo content -->
+                                <div class="d-flex align-items-center mb-4">
+                                    <div class="bg-primary rounded-circle p-2 me-3">
+                                        <i class="fas fa-code text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="fw-bold mb-0">Live Collaborative Editor</h5>
+                                        <small class="text-muted">JavaScript • React • Node.js</small>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <span class="badge bg-success">Live</span>
+                                    </div>
+                                </div>
+                                
                                 <div class="editor-container">
                                     <div class="editor-header d-flex">
                                         <div class="d-flex">
@@ -850,11 +782,19 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <!-- Floating elements -->
+                            <div class="position-absolute top-0 start-0 translate-middle" style="z-index: -1;">
+                                <div class="rounded-circle bg-primary" style="width: 60px; height: 60px; opacity: 0.2;"></div>
+                            </div>
+                            <div class="position-absolute bottom-0 end-0 translate-middle" style="z-index: -1;">
+                                <div class="rounded-circle bg-success" style="width: 80px; height: 80px; opacity: 0.2;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Trusted by Engineering Team -->
+                <!-- Trusted by Engineering Team (MOVED FROM HERO) -->
                 <div class="row py-5 mt-5" data-aos="fade-up" data-aos-duration="1000">
                     <div class="col-12 text-center mb-4">
                         <h2 class="display-5 fw-bold display-font mb-3">Trusted by Engineering Teams</h2>
@@ -905,7 +845,7 @@
                     </div>
                 </div>
                 
-                <!-- Why Developers Love HackHub -->
+                <!-- Why Developers Love HackHub (MOVED FROM STATS SECTION) -->
                 <div class="row py-5" data-aos="fade-up" data-aos-duration="1000">
                     <div class="col-12 text-center mb-5">
                         <h2 class="display-5 fw-bold display-font mb-3">Why Developers Love HackHub</h2>
@@ -941,7 +881,7 @@
                     </div>
                 </div>
                 
-                <!-- How HackHub Works -->
+                <!-- How HackHub Works (PLACED BELOW "WHY DEVELOPERS LOVE HACKHUB") -->
                 <div class="row py-5" data-aos="fade-up" data-aos-duration="1000">
                     <div class="col-12 text-center mb-5">
                         <h2 class="display-5 fw-bold display-font mb-3">How HackHub Works</h2>
@@ -992,7 +932,6 @@
             <div class="container py-5">
                 <div class="row justify-content-center align-items-center min-vh-80">
                     <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-duration="800">
-                        <!-- Login form content -->
                         <div class="glass-card p-4 p-md-5">
                             <div class="text-center mb-5">
                                 <div class="rounded-circle gradient-bg d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
@@ -1063,7 +1002,6 @@
             <div class="container py-5">
                 <div class="row justify-content-center align-items-center min-vh-80">
                     <div class="col-md-8 col-lg-7" data-aos="zoom-in" data-aos-duration="800">
-                        <!-- Registration form content -->
                         <div class="glass-card p-4 p-md-5">
                             <div class="text-center mb-5">
                                 <div class="rounded-circle gradient-bg d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
@@ -1092,7 +1030,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Rest of registration form -->
                                 <div class="mb-4">
                                     <label for="registerEmail" class="form-label fw-bold mb-2">Email Address</label>
                                     <div class="input-group">
@@ -1188,7 +1125,6 @@
                     </div>
                 </div>
                 
-                <!-- Dashboard content -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-md-4 mb-4">
                         <div class="glass-card p-4 h-100 feature-card">
@@ -1367,7 +1303,6 @@
         <!-- Code Editor Section -->
         <section id="codeEditor" class="section">
             <div class="container-fluid p-0 h-100">
-                <!-- Code editor interface -->
                 <div class="row g-0 h-100">
                     <!-- Left Sidebar -->
                     <div class="col-lg-2 col-md-3 d-flex flex-column border-end border-secondary" style="background-color: var(--dark);">
@@ -1396,7 +1331,36 @@
                                     <small class="text-success">Editing index.js</small>
                                 </div>
                             </div>
-                            <!-- More participants -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-3">
+                                    <img src="https://ui-avatars.com/api/?name=Alex&background=10b981&color=fff" class="rounded-circle" width="40" height="40" alt="Alex">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-dark rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Alex Johnson</div>
+                                    <small class="text-success">Active</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="position-relative me-3">
+                                    <img src="https://ui-avatars.com/api/?name=Sam&background=f59e0b&color=fff" class="rounded-circle" width="40" height="40" alt="Sam">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-dark rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Sam Wilson</div>
+                                    <small class="text-success">Viewing</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="position-relative me-3">
+                                    <img src="https://ui-avatars.com/api/?name=Taylor&background=ef4444&color=fff" class="rounded-circle" width="40" height="40" alt="Taylor">
+                                    <span class="position-absolute bottom-0 end-0 p-1 bg-warning border border-dark rounded-circle"></span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold">Taylor Swift</div>
+                                    <small class="text-warning">Away</small>
+                                </div>
+                            </div>
                         </div>
                         
                         <!-- File Explorer -->
@@ -1421,6 +1385,14 @@
                             <div class="ms-4 mb-1">
                                 <i class="fas fa-file-alt text-info me-2"></i>
                                 <span>README.md</span>
+                            </div>
+                            <div class="mb-2 mt-4">
+                                <i class="fas fa-folder text-warning me-2"></i>
+                                <span>public</span>
+                            </div>
+                            <div class="mb-2 mt-4">
+                                <i class="fas fa-folder text-warning me-2"></i>
+                                <span>node_modules</span>
                             </div>
                         </div>
                         
@@ -1630,7 +1602,6 @@
         <!-- Video Call Section -->
         <section id="videoCall" class="section">
             <div class="container-fluid p-0 h-100">
-                <!-- Video call interface -->
                 <div class="row g-0 h-100">
                     <!-- Main Video Area -->
                     <div class="col-lg-9 p-0">
@@ -1818,7 +1789,6 @@
         <!-- Chat Section -->
         <section id="chat" class="section">
             <div class="container-fluid p-0 h-100">
-                <!-- Chat interface -->
                 <div class="row g-0 h-100">
                     <!-- Chat Messages -->
                     <div class="col-lg-9 p-0 h-100 d-flex flex-column">
@@ -1843,7 +1813,6 @@
                         </div>
                         
                         <div class="flex-grow-1 p-4 overflow-auto" id="chatMessages" style="background: rgba(15, 15, 35, 0.5);">
-                            <!-- Chat messages content -->
                             <div class="d-flex flex-column">
                                 <div class="text-center mb-4">
                                     <small class="text-muted">Today, 10:15 AM</small>
@@ -1903,6 +1872,45 @@
                                         <small class="text-muted ms-2">10:21 AM</small>
                                     </div>
                                     <div>I'll take a look at that. Can you assign it to me in the project board?</div>
+                                </div>
+                                
+                                <div class="text-center my-4">
+                                    <small class="text-muted">Taylor joined the chat</small>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img src="https://ui-avatars.com/api/?name=Taylor&background=ef4444&color=fff" class="rounded-circle me-2" width="24" height="24" alt="Taylor">
+                                        <div class="fw-bold">Taylor Swift</div>
+                                        <small class="text-muted ms-2">10:25 AM</small>
+                                    </div>
+                                    <div>Sorry I'm late! My internet was down. What did I miss?</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img src="https://ui-avatars.com/api/?name=Sam&background=f59e0b&color=fff" class="rounded-circle me-2" width="24" height="24" alt="Sam">
+                                        <div class="fw-bold">Sam Wilson</div>
+                                        <small class="text-muted ms-2">10:26 AM</small>
+                                    </div>
+                                    <div>Welcome back Taylor! We're discussing the dashboard bug and login form updates. Alex just pushed some changes to the auth branch.</div>
+                                </div>
+                                
+                                <div class="message-bubble other">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <img src="https://ui-avatars.com/api/?name=Alex&background=10b981&color=fff" class="rounded-circle me-2" width="24" height="24" alt="Alex">
+                                        <div class="fw-bold">Alex Johnson</div>
+                                        <small class="text-muted ms-2">10:27 AM</small>
+                                    </div>
+                                    <div>Taylor, can you review the PR for the notification system when you get a chance? It's PR #42 in the repo.</div>
+                                </div>
+                                
+                                <div class="message-bubble other typing">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://ui-avatars.com/api/?name=Taylor&background=ef4444&color=fff" class="rounded-circle me-2" width="24" height="24" alt="Taylor">
+                                        <div class="fw-bold">Taylor Swift</div>
+                                        <span class="ms-2 text-muted">is typing...</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2021,7 +2029,6 @@
             <div class="container py-5">
                 <div class="row justify-content-center align-items-center min-vh-80">
                     <div class="col-md-8 col-lg-6" data-aos="zoom-in">
-                        <!-- Create room form -->
                         <div class="glass-card p-4 p-md-5">
                             <div class="text-center mb-5">
                                 <div class="rounded-circle gradient-bg d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
@@ -2114,7 +2121,6 @@
                     </div>
                 </div>
                 
-                <!-- Features content -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-md-6 mb-4">
                         <div class="glass-card p-4 h-100 feature-card">
@@ -2155,7 +2161,6 @@
                     </div>
                 </div>
                 
-                <!-- More features rows -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-md-6 mb-4">
                         <div class="glass-card p-4 h-100 feature-card">
@@ -2196,7 +2201,6 @@
                     </div>
                 </div>
                 
-                <!-- More features -->
                 <div class="row" data-aos="fade-up">
                     <div class="col-md-6 mb-4">
                         <div class="glass-card p-4 h-100 feature-card">
@@ -2257,7 +2261,6 @@
                     </div>
                 </div>
                 
-                <!-- About content -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-lg-6 mb-4">
                         <div class="glass-card p-5 h-100">
@@ -2306,7 +2309,6 @@
                     </div>
                 </div>
                 
-                <!-- Team section -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-12 text-center mb-5">
                         <h2 class="display-5 fw-bold display-font">Meet Our Team</h2>
@@ -2352,7 +2354,6 @@
                     </div>
                 </div>
                 
-                <!-- Help content -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-md-4 mb-4">
                         <div class="glass-card p-5 h-100 text-center feature-card">
@@ -2388,7 +2389,6 @@
                     </div>
                 </div>
                 
-                <!-- FAQ section -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-12 mb-4">
                         <h2 class="display-5 fw-bold display-font text-center">Frequently Asked Questions</h2>
@@ -2423,7 +2423,6 @@
                     </div>
                 </div>
                 
-                <!-- Contact support -->
                 <div class="row" data-aos="fade-up">
                     <div class="col-12">
                         <div class="glass-card p-5">
@@ -2454,7 +2453,6 @@
                     </div>
                 </div>
                 
-                <!-- Pricing cards -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-md-4 mb-4">
                         <div class="glass-card p-5 h-100 pricing-card">
@@ -2518,7 +2516,6 @@
                     </div>
                 </div>
                 
-                <!-- Custom plan -->
                 <div class="row" data-aos="fade-up">
                     <div class="col-12">
                         <div class="glass-card p-5">
@@ -2549,7 +2546,6 @@
                     </div>
                 </div>
                 
-                <!-- Trending projects -->
                 <div class="row mb-5" data-aos="fade-up">
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="glass-card p-4 h-100 project-card">
@@ -2626,7 +2622,6 @@
                         </div>
                     </div>
                     
-                    <!-- More trending projects -->
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="glass-card p-4 h-100 project-card">
                             <div class="d-flex align-items-center mb-3">
@@ -2758,47 +2753,20 @@
         const pageTransition = document.getElementById('pageTransition');
         const themeToggle = document.getElementById('themeToggle');
         const particleCanvas = document.getElementById('particleCanvas');
-        const navbarCollapse = document.querySelector('.navbar-collapse');
         
-        // FIXED: Initialize immediately without loading animation
-        window.addEventListener('DOMContentLoaded', function() {
+        // Initialize immediately without loading animation
+        window.addEventListener('load', function() {
             initParticles();
             initStatsCounter();
             updateTime();
             
             // Show home section immediately
             showSection('home');
-            
-            // FIXED: Initialize mobile menu properly
-            initMobileMenu();
         });
-        
-        // FIXED: Mobile menu initialization
-        function initMobileMenu() {
-            const navbarToggler = document.querySelector('.navbar-toggler');
-            if (navbarToggler) {
-                navbarToggler.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    // Let Bootstrap handle the toggle
-                });
-            }
-            
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (navbarCollapse.classList.contains('show') && 
-                    !e.target.closest('.navbar-collapse') && 
-                    !e.target.closest('.navbar-toggler')) {
-                    const bsCollapse = new bootstrap.Collapse(navbarCollapse);
-                    bsCollapse.hide();
-                }
-            });
-        }
         
         // Particle background
         function initParticles() {
             const canvas = particleCanvas;
-            if (!canvas) return;
-            
             const ctx = canvas.getContext('2d');
             
             // Set canvas size
@@ -2892,12 +2860,10 @@
             });
         }
         
-        // FIXED: Show a specific section with transition
+        // Show a specific section with transition
         function showSection(sectionId) {
             // Show page transition
-            if (pageTransition) {
-                pageTransition.style.transform = 'translateX(0)';
-            }
+            pageTransition.style.transform = 'translateX(0)';
             
             setTimeout(() => {
                 // Hide all sections
@@ -2925,20 +2891,17 @@
                     showSection('page404');
                 }
                 
-                // FIXED: Close mobile navbar if open (using Bootstrap method)
-                if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-                    if (bsCollapse) {
-                        bsCollapse.hide();
-                    }
+                // Close mobile navbar if open
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                if (navbarCollapse.classList.contains('show')) {
+                    const navbarToggler = document.querySelector('.navbar-toggler');
+                    navbarToggler.click();
                 }
                 
                 // Hide page transition
-                if (pageTransition) {
-                    setTimeout(() => {
-                        pageTransition.style.transform = 'translateX(100%)';
-                    }, 50);
-                }
+                setTimeout(() => {
+                    pageTransition.style.transform = 'translateX(100%)';
+                }, 50);
                 
             }, 300);
             
@@ -2992,7 +2955,7 @@
         const confirmPassword = document.getElementById('confirmPassword');
         const passwordMatch = document.getElementById('passwordMatch');
         
-        if (passwordInput && passwordStrength && passwordStrengthText) {
+        if (passwordInput) {
             passwordInput.addEventListener('input', function() {
                 const password = this.value;
                 let strength = 0;
@@ -3030,7 +2993,7 @@
         }
         
         function checkPasswordMatch() {
-            if (passwordInput && confirmPassword && passwordMatch) {
+            if (passwordInput && confirmPassword) {
                 if (confirmPassword.value === '') {
                     passwordMatch.textContent = '';
                 } else if (passwordInput.value === confirmPassword.value) {
@@ -3050,22 +3013,18 @@
         if (togglePassword) {
             togglePassword.addEventListener('click', function() {
                 const passwordInput = document.getElementById('loginPassword');
-                if (passwordInput) {
-                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordInput.setAttribute('type', type);
-                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-                }
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
             });
         }
         
         if (toggleRegisterPassword) {
             toggleRegisterPassword.addEventListener('click', function() {
                 const passwordInput = document.getElementById('registerPassword');
-                if (passwordInput) {
-                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    passwordInput.setAttribute('type', type);
-                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-                }
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
             });
         }
         
@@ -3093,11 +3052,8 @@
         if (roomForm) {
             roomForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const roomName = document.getElementById('roomName')?.value || 'New Session';
-                const roomNameDisplay = document.getElementById('roomNameDisplay');
-                if (roomNameDisplay) {
-                    roomNameDisplay.textContent = roomName;
-                }
+                const roomName = document.getElementById('roomName').value;
+                document.getElementById('roomNameDisplay').textContent = roomName;
                 showNotification(`Session "${roomName}" created!`, 'success');
                 setTimeout(() => showSection('codeEditor'), 1000);
             });
@@ -3107,15 +3063,12 @@
         const joinRoomBtn = document.getElementById('joinRoomBtn');
         if (joinRoomBtn) {
             joinRoomBtn.addEventListener('click', function() {
-                const roomIdInput = document.getElementById('roomIdInput');
-                if (roomIdInput) {
-                    const roomId = roomIdInput.value;
-                    if (roomId.trim() === '') {
-                        showNotification('Please enter a room ID', 'info');
-                    } else {
-                        showNotification(`Joining session ${roomId}...`, 'success');
-                        setTimeout(() => showSection('codeEditor'), 1000);
-                    }
+                const roomId = document.getElementById('roomIdInput').value;
+                if (roomId.trim() === '') {
+                    showNotification('Please enter a room ID', 'info');
+                } else {
+                    showNotification(`Joining session ${roomId}...`, 'success');
+                    setTimeout(() => showSection('codeEditor'), 1000);
                 }
             });
         }
@@ -3124,40 +3077,36 @@
         function runCode() {
             const consoleOutput = document.getElementById('consoleOutput');
             
-            if (consoleOutput) {
-                // Add new output
-                const newOutput = document.createElement('div');
-                newOutput.className = 'text-success mb-2';
-                newOutput.innerHTML = '<i class="fas fa-play-circle me-2"></i> Running code...';
-                
-                const outputText = document.createElement('div');
-                outputText.className = 'text-primary mt-2';
-                outputText.innerHTML = `
-                    <div>✓ Compiled successfully</div>
-                    <div>✓ Started development server on http://localhost:3000</div>
-                    <div>✓ Connected to 3 collaborators</div>
-                    <div>✓ Live reload enabled</div>
-                    <div class="mt-2 text-success">✓ Execution completed in 1.2s</div>
-                `;
-                
-                consoleOutput.prepend(outputText);
-                consoleOutput.prepend(newOutput);
-                
-                // Scroll to top
-                consoleOutput.scrollTop = 0;
-                
-                // Show success message
-                showNotification('Code executed successfully!', 'success');
-            }
+            // Add new output
+            const newOutput = document.createElement('div');
+            newOutput.className = 'text-success mb-2';
+            newOutput.innerHTML = '<i class="fas fa-play-circle me-2"></i> Running code...';
+            
+            const outputText = document.createElement('div');
+            outputText.className = 'text-primary mt-2';
+            outputText.innerHTML = `
+                <div>✓ Compiled successfully</div>
+                <div>✓ Started development server on http://localhost:3000</div>
+                <div>✓ Connected to 3 collaborators</div>
+                <div>✓ Live reload enabled</div>
+                <div class="mt-2 text-success">✓ Execution completed in 1.2s</div>
+            `;
+            
+            consoleOutput.prepend(outputText);
+            consoleOutput.prepend(newOutput);
+            
+            // Scroll to top
+            consoleOutput.scrollTop = 0;
+            
+            // Show success message
+            showNotification('Code executed successfully!', 'success');
         }
         
         // Clear console
         function clearConsole() {
             const consoleOutput = document.getElementById('consoleOutput');
-            if (consoleOutput) {
-                consoleOutput.innerHTML = '<div class="text-success"><i class="fas fa-terminal me-2"></i>Console ready. Run code to see output.</div>';
-                showNotification('Console cleared', 'info');
-            }
+            consoleOutput.innerHTML = '<div class="text-success"><i class="fas fa-terminal me-2"></i>Console ready. Run code to see output.</div>';
+            showNotification('Console cleared', 'info');
         }
         
         // Update time in editor
@@ -3177,8 +3126,6 @@
             const roomLink = 'https://hackhub.dev/room/abc123';
             navigator.clipboard.writeText(roomLink).then(() => {
                 showNotification('Room link copied to clipboard!', 'success');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
             });
         }
         
@@ -3187,7 +3134,7 @@
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
         
-        if (sendMessageBtn && chatInput && chatMessages) {
+        if (sendMessageBtn && chatInput) {
             sendMessageBtn.addEventListener('click', sendMessage);
             chatInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
@@ -3359,7 +3306,7 @@
         const publicRoomRadio = document.getElementById('publicRoom');
         const privateRoomRadio = document.getElementById('privateRoom');
         
-        if (publicRoomCard && privateRoomCard && publicRoomRadio && privateRoomRadio) {
+        if (publicRoomCard && privateRoomCard) {
             publicRoomCard.addEventListener('click', function() {
                 publicRoomRadio.checked = true;
                 publicRoomCard.style.borderColor = 'var(--primary)';
@@ -3403,21 +3350,6 @@
         if (themeToggle) {
             themeToggle.addEventListener('change', toggleTheme);
         }
-        
-        // FIXED: Ensure all pages are visible by default on load
-        window.addEventListener('load', function() {
-            // Make sure all sections are properly initialized
-            sections.forEach(section => {
-                if (!section.classList.contains('active')) {
-                    section.style.display = 'none';
-                }
-            });
-            
-            // Refresh AOS animations
-            setTimeout(() => {
-                AOS.refresh();
-            }, 500);
-        });
     </script>
 </body>
 </html>
